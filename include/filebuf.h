@@ -19,7 +19,7 @@ class basic_filebuf : public std::basic_streambuf<CharT, Traits> {
          * @brief Construct a basic_filebuf object
          * @param file The FILE* to wrap around
          */
-        basic_filebuf(FILE *file) {
+        basic_filebuf(std::FILE *file) {
             m_file = file;
         }
 
@@ -29,8 +29,8 @@ class basic_filebuf : public std::basic_streambuf<CharT, Traits> {
          * @return Traits::eof() if the file can't be written to; c otherwise
          * @param c The character to insert
          */
-        Traits::int_type overflow(Traits::int_type c) override {
-            return fputc(c, file);
+        typename Traits::int_type overflow(typename Traits::int_type c) override {
+            return std::fputc(c, m_file);
         }
 
         /**
@@ -38,8 +38,8 @@ class basic_filebuf : public std::basic_streambuf<CharT, Traits> {
          * @return Traits::eof() if the file can't be read from; the next
          *         character otherwise
          */
-        Traits::int_type underflow() override {
-            return fgetc(file);
+        typename Traits::int_type underflow() override {
+            return std::fgetc(m_file);
         }
 
         /**
@@ -48,10 +48,13 @@ class basic_filebuf : public std::basic_streambuf<CharT, Traits> {
          *         on success
          */
         int sync() override {
-            return fflush(file);
+            return std::fflush(m_file);
         }
 
     private:
         /// @brief The FILE* to wrap around
-        FILE *m_file;
+        std::FILE *m_file;
 };
+
+using filebuf = basic_filebuf<char>;
+using wfilebuf = basic_filebuf<wchar_t>;
