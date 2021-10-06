@@ -34,7 +34,7 @@ TEST(filebufTests, SimpleWriteTest) {
         std::ostream out(&buf);
 
         // Write the data into the file
-        out.write(data_buf.data(), data_buf.size());
+        out << data_buf.data();
     }
 
     // Rewind the FILE* so we can read from it
